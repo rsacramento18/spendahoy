@@ -1,0 +1,2 @@
+# spendahoy
+Simple Finances application
