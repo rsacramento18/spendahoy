@@ -1,0 +1,41 @@
+{
+  "name": "spendahoy",
+  "version": "1.0.0",
+  "description": "Simple Finances application",
+  "main": "index.js",
+  "scripts": {
+    "start": "ts-node app.ts",
+    "dev": "nodemon app.ts",
+    "build": "tsc -p",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rsacramento18/spendahoy.git"
+  },
+  "keywords": [],
+  "author": "Ricardo Sacramento",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rsacramento18/spendahoy/issues"
+  },
+  "homepage": "https://github.com/rsacramento18/spendahoy#readme",
+  "dependencies": {
+    "@types/dotenv": "^8.2.0",
+    "@types/pg": "^8.6.4",
+    "csv-parse": "^5.0.4",
+    "dotenv": "^16.0.0",
+    "express": "^4.17.2",
+    "moment": "^2.29.1",
+    "multer": "^1.4.4",
+    "node-xlsx": "^0.21.0",
+    "pg": "^8.7.3"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.13",
+    "@types/multer": "^1.4.7",
+    "@types/node": "^16.11.22",
+    "ts-node": "^10.4.0",
+    "typescript": "^4.5.5"
+  }
+}
