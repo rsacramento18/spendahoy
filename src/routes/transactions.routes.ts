@@ -14,7 +14,22 @@ export const getTransactions = async (req: Request, res: Response) => {
   else {
     ({ rows }  = await db.query(query.Get_Transactions, []));
   }
-  res.status(200).json(rows);
+
+  const transactions = rows.map((row: any) => {
+    return ({
+      "id": row.transaction_id,
+      "date" : row.date,
+      "description": row.description,
+      "value": row.value,
+      "type": row.type,
+      "organizationName": row.name,
+      "categoryId": row.category_id,
+      "categoryName": row.category,
+      "review": row.review,
+      "isDeleted": row.isdeleted
+    });
+  });
+  res.status(200).json(transactions);
 };
 
 export const getCreditTransactions = async (req: Request, res: Response) => {
@@ -87,3 +102,33 @@ export const getGroupedTransactionsDescribed = async (req: Request, res: Respons
 
   res.status(200).json(categoriesMapped);
 };
+
+export const saveCategory = async (req: Request, res: Response) => {
+  try {
+    db.query(query.SPROC_Update_Transaction_Category, [req.body.id, req.body.categoryId]);
+  } catch {
+    res.status(500).json({status: 'Internal Server Error'});
+  }
+  res.sendStatus(200);
+}
+
+export const saveReview = async (req: Request, res: Response) => {
+  try {
+    db.query(query.SPROC_Update_Transaction_Review, [req.body.id]);
+  } catch {
+    res.status(500).json({status: 'Internal Server Error'});
+  }
+  res.sendStatus(200);
+}
+
+export const deleteTransaction = async (req: Request, res: Response) => {
+  try {
+    db.query(query.SPROC_Delete_Transaction, [Number(req.query.id)]);
+  } catch {
+    res.status(500).json({status: 'Internal Server Error'});
+  }
+  res.sendStatus(200);
+}
+
+
+

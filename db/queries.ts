@@ -17,6 +17,15 @@ export const SPROC_Insert_Transaction = `
 export const SPROC_Insert_Transaction_Credit = `
   CALL insert_transaction_credit($1, $2, $3, $4, $5, $6, $7)`;
 
+export const SPROC_Update_Transaction_Category = `
+  CALL update_transaction_category($1, $2)`;
+
+export const SPROC_Update_Transaction_Review = `
+  CALL update_transaction_review($1)`;
+
+export const SPROC_Delete_Transaction = `
+  CALL delete_transaction($1)`;
+
 // ====================================================================
 // Category
 // ====================================================================
@@ -40,24 +49,27 @@ export const Insert_Category = `
 // ====================================================================
 
 export const Get_Transactions = `
-  SELECT t.transaction_id, t.date, t.description, t.value, t.type, o.name, c.name as category
+  SELECT t.transaction_id, t.date, t.description, t.value, t.type, o.name, t.category_id, c.name as category, t.review, t.isdeleted
   FROM transaction t 
   INNER JOIN Organization o ON o.organization_id = t.organization_id
-  LEFT JOIN Category c ON c.category_id = t.category_id`;
+  LEFT JOIN Category c ON c.category_id = t.category_id
+  ORDER BY t.transaction_id`;
 
 export const Get_Transactions_by_year_month = `
-  SELECT t.transaction_id, t.date, t.description, t.value, t.type, o.name, t.category_id, c.name as category
+  SELECT t.transaction_id, t.date, t.description, t.value, t.type, o.name, t.category_id, c.name as category, t.review, t.isdeleted
   FROM transaction t 
   INNER JOIN Organization o ON o.organization_id = t.organization_id
   LEFT JOIN Category c ON c.category_id = t.category_id
-  WHERE t.year = $1 and t.month = $2`;
+  WHERE t.year = $1 and t.month = $2
+  ORDER BY t.transaction_id`;
 
 export const Get_Transactions_by_year = `
-  SELECT t.transaction_id, t.date, t.description, t.value, t.type, o.name, c.name as category
+  SELECT t.transaction_id, t.date, t.description, t.value, t.type, o.name, t.category_id, c.name as category, t.review, t.isdeleted
   FROM transaction t 
   INNER JOIN Organization o ON o.organization_id = t.organization_id
   LEFT JOIN Category c ON c.category_id = t.category_id
-  WHERE t.year = $1`;
+  WHERE t.year = $1
+  ORDER BY t.transaction_id`;
 
 export const Get_Grouped_Categories_by_year_month = `
   SELECT c.category_id, coalesce(c.name, 'Não Identificado') as name, sum(value)

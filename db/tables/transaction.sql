@@ -9,6 +9,8 @@ Create Table transaction (
   type varchar (50) not null,
   organization_id int not null,
   category_id int,
+  review boolean default FALSE,
+  isdeleted boolean default FALSE,
   PRIMARY KEY(year, month, date, description, value, balance)
 );
 

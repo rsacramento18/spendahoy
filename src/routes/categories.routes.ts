@@ -6,7 +6,14 @@ import { Rule } from '../interfaces/category'
 export const getCategories = async (req: Request, res: Response) => {
   const { rows } = await db.query(query.Get_All_Categories, []);
 
-  res.status(200).json(rows);
+  const categories = rows.map((row: any) => {
+    return ({
+      "id": row.category_id, 
+      "name": row.name
+    });
+  })
+
+  res.status(200).json(categories);
 }
 
 export const getCategoriesRules = async (req: Request, res: Response) => {
