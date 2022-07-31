@@ -5,11 +5,14 @@ import { Transaction } from '../interfaces/transaction'
 
 export const getTransactions = async (req: Request, res: Response) => {
   let rows: any;
-  if(req.params.year && req.params.month) {
-    ({ rows } = await db.query(query.Get_Transactions_by_year_month, [req.params.year, req.params.month]));
+  const year: string = req.query.year as string;
+  const month: string = req.query.month as string;
+
+  if(year && month) {
+    ({ rows } = await db.query(query.Get_Transactions_by_year_month, [year, month]));
   }
-  else if(req.params.year) {
-    ({ rows } = await db.query(query.Get_Transactions_by_year, [req.params.year]));
+  else if(year) {
+    ({ rows } = await db.query(query.Get_Transactions_by_year, [year]));
   }
   else {
     ({ rows }  = await db.query(query.Get_Transactions, []));
@@ -34,40 +37,60 @@ export const getTransactions = async (req: Request, res: Response) => {
 
 export const getCreditTransactions = async (req: Request, res: Response) => {
   let rows: any;
-  if(req.params.year && req.params.month) {
-    ({ rows } = await db.query(query.Get_Credit_Transactions_by_year_month, [req.params.year, req.params.month]));
+  const year: string = req.query.year as string;
+  const month: string = req.query.month as string;
+
+  if(year && month) {
+    ({ rows } = await db.query(query.Get_Credit_Transactions_by_year_month, [year, month]));
   }
-  else if(req.params.year) {
-    ({ rows } = await db.query(query.Get_Credit_Transactions_by_year, [req.params.year]));
+  else if(year) {
+    ({ rows } = await db.query(query.Get_Credit_Transactions_by_year, [year]));
   }
   else {
     ({ rows }  = await db.query(query.Get_Credit_Transactions, []));
   }
+
   res.status(200).json(rows);
 };
 
 export const getGroupedTransactions = async (req: Request, res: Response) => {
   let rows: any;
-  if(req.params.year && req.params.month) {
-    ({ rows } = await db.query(query.Get_Grouped_Categories_by_year_month, [req.params.year, req.params.month]));
+  const year: string = req.query.year as string;
+  const month: string = req.query.month as string;
+
+  if(year && month) {
+    ({ rows } = await db.query(query.Get_Grouped_Categories_by_year_month, [year, month]));
   }
-  else if(req.params.year) {
-    ({ rows } = await db.query(query.Get_Grouped_Categories_by_year, [req.params.year]));
+  else if(year) {
+    ({ rows } = await db.query(query.Get_Grouped_Categories_by_year, [year]));
   }
   else {
     ({ rows }  = await db.query(query.Get_Grouped_Categories, []));
   }
-  res.status(200).json(rows);
+
+  const groupedTransactions = rows.map((row: any) => {
+    return ({
+      "id": row.category_id,
+      "name": row.name,
+      "sum": row.sum,
+      "limit": row.limit_value
+    })
+  });
+  res.status(200).json(groupedTransactions);
 };
 
 export const getGroupedTransactionsDescribed = async (req: Request, res: Response) => {
   let categories: any;
   let transactions: any;
-  if(req.params.year && req.params.month) {
-    categories = await db.query(query.Get_Grouped_Categories_by_year_month, [req.params.year, req.params.month]);
+
+  const year: string = req.query.year as string;
+  const month: string = req.query.month as string;
+
+  if(year && month) {
+    categories = await db.query(query.Get_Grouped_Categories_by_year_month, [year, month]);
   }
-  else if(req.params.year) {
-    categories = await db.query(query.Get_Grouped_Categories_by_year, [req.params.year]);
+  else if(year) {
+    categories = await db.query(query.Get_Grouped_Categories_by_year, [year]);
   }
   else {
     categories  = await db.query(query.Get_Grouped_Categories, []);
@@ -84,11 +107,11 @@ export const getGroupedTransactionsDescribed = async (req: Request, res: Respons
     };
   });
 
-  if(req.params.year && req.params.month) {
-    transactions = await db.query(query.Get_Transactions_by_year_month, [req.params.year, req.params.month]);
+  if(year && month) {
+    transactions = await db.query(query.Get_Transactions_by_year_month, [year, month]);
   }
-  else if(req.params.year) {
-    transactions = await db.query(query.Get_Transactions_by_year, [req.params.year]);
+  else if(year) {
+    transactions = await db.query(query.Get_Transactions_by_year, [year]);
   }
   else {
     transactions  = await db.query(query.Get_Transactions, []);
@@ -122,8 +145,9 @@ export const saveReview = async (req: Request, res: Response) => {
 }
 
 export const deleteTransaction = async (req: Request, res: Response) => {
+  const id: string = req.query.id as string;
   try {
-    db.query(query.SPROC_Delete_Transaction, [Number(req.query.id)]);
+    db.query(query.SPROC_Delete_Transaction, [Number(id)]);
   } catch {
     res.status(500).json({status: 'Internal Server Error'});
   }

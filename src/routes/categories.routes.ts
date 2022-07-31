@@ -35,7 +35,20 @@ export const getCategoriesRules = async (req: Request, res: Response) => {
   res.status(200).json(categoryRules);
 }
 
-export const insertCategory = async (req: Request, res:Response) => {
+export const insertCategory = async (req: Request, res: Response) => {
+  const name = req.body.name as string
+  db.query(query.Insert_Category, [name]);
 }
 
+export const updateCategory = async (req: Request, res: Response) => {
+  const id: number = req.body.id as number;
+  const name: string = req.body.name as string;
+  db.query(query.Update_Category, [name, id]);
+}
 
+export const setCategoryLimit = async (req: Request, res: Response) => {
+  const id: number = req.body.id as number;
+  const limit: number = req.body.limit as number;
+
+  db.query(query.Update_Category_Limit, [limit, id]);
+}

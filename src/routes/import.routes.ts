@@ -21,3 +21,4 @@ export const importExpenses = async (req: Request, res: Response) => {
   writeTransactions(organization.id, expense.transactions);
   res.status(200).json(expense.transactions);
 };
+

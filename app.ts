@@ -24,15 +24,18 @@ app.get('/api/check', (response: Response) => {
 
 app.post('/api/import/:format/:id', upload.single('importExpenses'), importRoutes.importExpenses);
 
-app.get('/api/transactions/:year?/:month?', transactionRoutes.getTransactions);
-app.get('/api/transactionscredit/:year?/:month?', transactionRoutes.getCreditTransactions);
-app.get('/api/transactionsgrouped/:year?/:month?', transactionRoutes.getGroupedTransactions);
-app.get('/api/transactionsgroupeddescribed/:year?/:month?', transactionRoutes.getGroupedTransactionsDescribed);
+app.get('/api/transactions', transactionRoutes.getTransactions);
+app.get('/api/transactionscredit', transactionRoutes.getCreditTransactions);
+app.get('/api/transactionsgrouped', transactionRoutes.getGroupedTransactions);
+app.get('/api/transactionsgroupeddescribed', transactionRoutes.getGroupedTransactionsDescribed);
 app.post('/api/transactions/savecategory', transactionRoutes.saveCategory);
 app.post('/api/transactions/savereview', transactionRoutes.saveReview);
 app.delete('/api/transactions', transactionRoutes.deleteTransaction);
 
 app.get('/api/categories', categoriesRoutes.getCategories);
+app.post('/api/categories', categoriesRoutes.insertCategory);
+app.put('/api/categories', categoriesRoutes.updateCategory);
+app.put('/api/categories/limit', categoriesRoutes.setCategoryLimit);
 app.get('/api/categoriesrules', categoriesRoutes.getCategoriesRules);
 
 app.listen(port, () => {

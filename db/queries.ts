@@ -43,6 +43,11 @@ export const Get_Category_Rules = `
 export const Insert_Category = `
   Insert Into category (name) values ($1)`;
 
+export const Update_Category = `
+  Update category set name = ($1) where category_id = $2`;
+
+export const Update_Category_Limit = `
+  Update category set limit_value = ($1) where category_id = $2`;
 
 // ====================================================================
 // Transactions
@@ -72,21 +77,21 @@ export const Get_Transactions_by_year = `
   ORDER BY t.transaction_id`;
 
 export const Get_Grouped_Categories_by_year_month = `
-  SELECT c.category_id, coalesce(c.name, 'Não Identificado') as name, sum(value)
+  SELECT c.category_id, coalesce(c.name, 'Não Identificado') as name, sum(value), c.limit_value
   FROM transaction t
   LEFT JOIN category c ON c.category_id = t.category_id
   WHERE t.year = $1 and t.month = $2
   GROUP BY c.category_id, c.name`;
 
 export const Get_Grouped_Categories_by_year = `
-  SELECT c.category_id, coalesce(c.name, 'Outros') as name, sum(value)
+  SELECT c.category_id, coalesce(c.name, 'Outros') as name, sum(value), c.limit_value
   FROM transaction t
   LEFT JOIN category c ON c.category_id = t.category_id
   WHERE t.year = $1
   GROUP BY c.category_id, c.name`;
 
 export const Get_Grouped_Categories = `
-  SELECT c.category_id, coalesce(c.name, 'Outros') as name, sum(value)
+  SELECT c.category_id, coalesce(c.name, 'Outros') as name, sum(value), c.limit_value
   FROM transaction t
   LEFT JOIN category c ON c.category_id = t.category_id
   GROUP BY c.category_id, c.name`;
