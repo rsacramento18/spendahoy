@@ -33,10 +33,11 @@ app.post('/api/transactions/savereview', transactionRoutes.saveReview);
 app.delete('/api/transactions', transactionRoutes.deleteTransaction);
 
 app.get('/api/categories', categoriesRoutes.getCategories);
+app.get('/api/categoriesdetail', categoriesRoutes.getCategoryDetail);
+app.get('/api/categoriesrules', categoriesRoutes.getAllCategoriesRules);
 app.post('/api/categories', categoriesRoutes.insertCategory);
 app.put('/api/categories', categoriesRoutes.updateCategory);
 app.put('/api/categories/limit', categoriesRoutes.setCategoryLimit);
-app.get('/api/categoriesrules', categoriesRoutes.getCategoriesRules);
 
 app.listen(port, () => {
   console.log(`App is running at ${port}`);

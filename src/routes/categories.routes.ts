@@ -16,10 +16,32 @@ export const getCategories = async (req: Request, res: Response) => {
   res.status(200).json(categories);
 }
 
-export const getCategoriesRules = async (req: Request, res: Response) => {
-  const { rows } = await db.query(query.Get_Category_Rules, []);
+export const getAllCategoriesRules = async (req: Request, res: Response) => {
+  const categoryRules = getCategoriesRules();
 
-  const categoryRules = rows.reduce((acc, obj) => {
+  res.status(200).json(categoryRules);
+}
+
+export const getCategoryDetail = async (req: Request, res: Response) => {
+  const categoryId: string = req.query.id as string;
+
+  const { rows } = await db.query(query.Get_Category_Detail, [categoryId]);
+
+  const categoryRules = getCategoriesRules(categoryId);
+
+}
+
+const getCategoriesRules = async (categoryId?: string) => {
+  let rows: any;
+
+  if (categoryId) {
+    ({ rows } = await db.query(query.Get_Category_Rules_by_Category_Id, [categoryId]));
+  }
+  else {
+    ({ rows } = await db.query(query.Get_Category_Rules, []));
+  }
+
+  const categoryRules = rows.reduce((acc: any, obj: any) => {
     let key = obj['name'];
     if (!acc[key]) {
       let rules: Rule[] = [];
@@ -31,8 +53,7 @@ export const getCategoriesRules = async (req: Request, res: Response) => {
     acc[key].rules.push({rule: obj.rule, operator: obj.operator});
     return acc;
   }, {});
-
-  res.status(200).json(categoryRules);
+  return categoryRules;
 }
 
 export const insertCategory = async (req: Request, res: Response) => {

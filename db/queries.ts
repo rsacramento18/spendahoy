@@ -40,6 +40,14 @@ export const Get_Category_Rules = `
   INNER JOIN rule r ON r.rule_id = cr.rule_id
   INNER JOIN operator o ON o.operator_id = r.operator_id`;
 
+export const Get_Category_Rules_by_Category_Id = `
+  SELECT c.category_id, c.name, r.rule, o.operator
+  FROM category c
+  INNER JOIN category_rule cr ON cr.category_id = c.category_id
+  INNER JOIN rule r ON r.rule_id = cr.rule_id
+  INNER JOIN operator o ON o.operator_id = r.operator_id
+  WHERE c.category_id = $1`;
+
 export const Insert_Category = `
   Insert Into category (name) values ($1)`;
 
