@@ -33,6 +33,11 @@ export const SPROC_Delete_Transaction = `
 export const Get_All_Categories = `
   SELECT * FROM category`;
 
+export const Get_Category_by_Category_Id = `
+  SELECT *
+  FROM category
+  WHERE category_id = $1`;
+
 export const Get_Category_Rules = `
   SELECT c.category_id, c.name, r.rule, o.operator
   FROM category c
@@ -56,6 +61,7 @@ export const Update_Category = `
 
 export const Update_Category_Limit = `
   Update category set limit_value = ($1) where category_id = $2`;
+
 
 // ====================================================================
 // Transactions

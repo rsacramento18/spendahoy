@@ -17,18 +17,44 @@ export const getCategories = async (req: Request, res: Response) => {
 }
 
 export const getAllCategoriesRules = async (req: Request, res: Response) => {
-  const categoryRules = getCategoriesRules();
+  const categoryRules = await getCategoriesRules();
 
-  res.status(200).json(categoryRules);
+  const result = categoryRules.reduce((acc: any, obj: any) => {
+    let key = obj['name'];
+    if (!acc[key]) {
+      let rules: Rule[] = [];
+      acc[key] = {
+        category_id: obj.category_id,
+        rules: rules,
+      };
+    }
+    acc[key].rules.push({rule: obj.rule, operator: obj.operator});
+    return acc;
+  }, {});
+
+  res.status(200).json(result);
 }
 
 export const getCategoryDetail = async (req: Request, res: Response) => {
   const categoryId: string = req.query.id as string;
 
-  const { rows } = await db.query(query.Get_Category_Detail, [categoryId]);
+  const { rows } = await db.query(query.Get_Category_by_Category_Id, [categoryId]);
 
-  const categoryRules = getCategoriesRules(categoryId);
+  const categoryRules = await getCategoriesRules(categoryId);
 
+  console.log(categoryRules);
+
+  res.send({
+    id: rows[0].category_id,
+    name: rows[0].name,
+    limit: rows[0].limit_value,
+    rules: categoryRules.map((x: any) => {
+      return {
+        rule: x.rule,
+        operator: x.operator,
+      };
+    }),
+  });
 }
 
 const getCategoriesRules = async (categoryId?: string) => {
@@ -41,19 +67,7 @@ const getCategoriesRules = async (categoryId?: string) => {
     ({ rows } = await db.query(query.Get_Category_Rules, []));
   }
 
-  const categoryRules = rows.reduce((acc: any, obj: any) => {
-    let key = obj['name'];
-    if (!acc[key]) {
-      let rules: Rule[] = [];
-      acc[key] = {
-        category_id: obj.category_id,
-        rules: rules,
-      };
-    }
-    acc[key].rules.push({rule: obj.rule, operator: obj.operator});
-    return acc;
-  }, {});
-  return categoryRules;
+  return rows;
 }
 
 export const insertCategory = async (req: Request, res: Response) => {
