@@ -3,6 +3,7 @@ import express, { Response } from 'express'
 import * as importRoutes from './src/routes/import.routes'
 import * as transactionRoutes from './src/routes/transactions.routes'
 import * as categoriesRoutes from './src/routes/categories.routes'
+import * as organizationRoutes from './src/routes/organization.routes'
 import upload from './src/middlewares/multer'
 import cors from 'cors'
 
@@ -38,6 +39,9 @@ app.get('/api/categoriesrules', categoriesRoutes.getAllCategoriesRules);
 app.post('/api/categories', categoriesRoutes.insertCategory);
 app.put('/api/categories', categoriesRoutes.updateCategory);
 app.put('/api/categories/limit', categoriesRoutes.setCategoryLimit);
+
+app.get('/api/organizations', organizationRoutes.getAllOrganizations);
+app.get('/api/importexpenses', importRoutes.importExpenses);
 
 app.listen(port, () => {
   console.log(`App is running at ${port}`);

@@ -7,6 +7,11 @@ export const Get_Organization = `
   INNER JOIN organization_settings os ON o.organization_id = os.organization_settings_id 
   WHERE o.organization_id = $1`;
 
+export const Get_All_Organizations = `
+  SELECT o.organization_id as id, o.name , os.delimiter, os.encoding
+  FROM organization o 
+  INNER JOIN organization_settings os ON o.organization_id = os.organization_settings_id`;
+
 // ====================================================================
 // Transaction
 // ====================================================================
