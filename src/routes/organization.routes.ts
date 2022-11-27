@@ -9,7 +9,7 @@ export const getAllOrganizations = async (req: Request, res: Response) => {
 
   const organizations: Organization[] = rows.map((row: any) => {
     return ({
-      "id": row.category_id, 
+      "id": row.id, 
       "name": row.name,
       "delimiter": row.delimiter,
       "encoding": row.encoding
